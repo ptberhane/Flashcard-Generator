@@ -13,13 +13,14 @@ function Cloze (full,partial){
 	this.full=full;
 	this.partial = partial;
 };
-function usersafeCloze(front,back){
+function usersafeCloze(full,partial){
 	return new Cloze(full,partial)
 };
 var firstPresident = usersafeBasic(
     "Who was the first president of the United States?", "George Washington");
-var firstPresidentpartial = usersafeCloze("....was the first president of the United States");
-var	firstPresidentfull = usersafeCloze("George Washington was the first president of the United States.");
+var firstPresidentcloze = usersafeCloze("George Washington was the first president of the United States.",
+	"....was the first president of the United States");
+
 /*console.log(firstPresident.front);*/
 promptUser();
 
@@ -34,19 +35,29 @@ function promptUser(){
 		if (user.types==="basic"){
 			console.log(firstPresident.front);
 			console.log(firstPresident.back);	
-			};
+			}
 			if (user.types ==="cloze"){
-				type:"rawlist"
-				message : "Partial or full flashcard?"
-				choices :["partial","full"],
-				name: "options",
-			}.then function(user){
-
-			else if  (user.options==="partial"){
-				console.log(firstPresidentpartial);
+				cloze();
 			}
 			else {
-				console.log(firstPresidentfull);
-			};
+				promptUser();
+			}
 	});
 }
+
+function cloze(){
+	inquirer.prompt([{
+		type:"rawlist",
+		message: "Full or partial?",
+		choices:["full","partial"],
+		name:"option"
+	}]).then (function (userB){
+		if (userB.option==="full"){
+			console.log(firstPresidentcloze.full);
+		}
+		else{
+			console.log(firstPresidentcloze.partial);
+		}
+	})
+		
+};
